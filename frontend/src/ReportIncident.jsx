@@ -58,7 +58,7 @@ const ReportIncident = () => {
         try {
             const pos = await new Promise((resolve, reject) => navigator.geolocation.getCurrentPosition(resolve, reject));
             location = { lat: pos.coords.latitude, lng: pos.coords.longitude };
-        } catch (_err) {
+        } catch {
             console.log("Could not get precise location, using default");
         }
     }
