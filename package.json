@@ -1,0 +1,16 @@
+{
+  "name": "projectcmr-root",
+  "version": "1.0.0",
+  "description": "Root package to run all services concurrently",
+  "scripts": {
+    "dev": "npm start",
+    "start": "concurrently \"npm run start:frontend\" \"npm run start:backend\" \"npm run start:ml\"",
+    "start:frontend": "cd frontend && npm run dev",
+    "start:backend": "cd backend && node server.js",
+    "start:ml": "cd ml_service && python main.py",
+    "install:all": "npm install && cd frontend && npm install && cd ../backend && npm install && cd ../ml_service && pip install -r requirements.txt"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

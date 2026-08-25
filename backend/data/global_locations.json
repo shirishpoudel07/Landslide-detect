@@ -1,0 +1,618 @@
+[
+  {
+    "id": 1,
+    "lat": 47.6,
+    "lng": -122.33,
+    "radius": 3000,
+    "name": "Seattle Area, USA"
+  },
+  {
+    "id": 2,
+    "lat": 45.52,
+    "lng": -122.67,
+    "radius": 3000,
+    "name": "Portland, USA"
+  },
+  {
+    "id": 3,
+    "lat": 40.71,
+    "lng": -74,
+    "radius": 3000,
+    "name": "New York, USA"
+  },
+  {
+    "id": 4,
+    "lat": 39.73,
+    "lng": -104.99,
+    "radius": 3000,
+    "name": "Denver, USA"
+  },
+  {
+    "id": 5,
+    "lat": 25.76,
+    "lng": -80.19,
+    "radius": 3000,
+    "name": "Miami, USA"
+  },
+  {
+    "id": 6,
+    "lat": 51.04,
+    "lng": -114.07,
+    "radius": 3000,
+    "name": "Calgary, Canada"
+  },
+  {
+    "id": 7,
+    "lat": 49.28,
+    "lng": -123.12,
+    "radius": 3000,
+    "name": "Vancouver, Canada"
+  },
+  {
+    "id": 8,
+    "lat": 19.43,
+    "lng": -99.13,
+    "radius": 3000,
+    "name": "Mexico City, Mexico"
+  },
+  {
+    "id": 9,
+    "lat": 14.63,
+    "lng": -90.51,
+    "radius": 3000,
+    "name": "Guatemala City, Guatemala"
+  },
+  {
+    "id": 10,
+    "lat": -4.71,
+    "lng": -74.07,
+    "radius": 3000,
+    "name": "Bogota, Colombia"
+  },
+  {
+    "id": 11,
+    "lat": -0.22,
+    "lng": -78.5,
+    "radius": 3000,
+    "name": "Quito, Ecuador"
+  },
+  {
+    "id": 12,
+    "lat": -12.04,
+    "lng": -77.04,
+    "radius": 3000,
+    "name": "Lima, Peru"
+  },
+  {
+    "id": 13,
+    "lat": -16.5,
+    "lng": -68.11,
+    "radius": 3000,
+    "name": "La Paz, Bolivia"
+  },
+  {
+    "id": 14,
+    "lat": -33.44,
+    "lng": -70.66,
+    "radius": 3000,
+    "name": "Santiago, Chile"
+  },
+  {
+    "id": 15,
+    "lat": -34.6,
+    "lng": -58.38,
+    "radius": 3000,
+    "name": "Buenos Aires, Argentina"
+  },
+  {
+    "id": 16,
+    "lat": -23.55,
+    "lng": -46.63,
+    "radius": 3000,
+    "name": "Sao Paulo, Brazil"
+  },
+  {
+    "id": 17,
+    "lat": 10.48,
+    "lng": -66.9,
+    "radius": 3000,
+    "name": "Caracas, Venezuela"
+  },
+  {
+    "id": 18,
+    "lat": 51.5,
+    "lng": -0.12,
+    "radius": 3000,
+    "name": "London, UK"
+  },
+  {
+    "id": 19,
+    "lat": 55.95,
+    "lng": -3.18,
+    "radius": 3000,
+    "name": "Edinburgh, UK"
+  },
+  {
+    "id": 20,
+    "lat": 48.85,
+    "lng": 2.35,
+    "radius": 3000,
+    "name": "Paris, France"
+  },
+  {
+    "id": 21,
+    "lat": 43.29,
+    "lng": 5.36,
+    "radius": 3000,
+    "name": "Marseille, France"
+  },
+  {
+    "id": 22,
+    "lat": 40.41,
+    "lng": -3.7,
+    "radius": 3000,
+    "name": "Madrid, Spain"
+  },
+  {
+    "id": 23,
+    "lat": 41.38,
+    "lng": 2.16,
+    "radius": 3000,
+    "name": "Barcelona, Spain"
+  },
+  {
+    "id": 24,
+    "lat": 41.9,
+    "lng": 12.49,
+    "radius": 3000,
+    "name": "Rome, Italy"
+  },
+  {
+    "id": 25,
+    "lat": 45.46,
+    "lng": 9.19,
+    "radius": 3000,
+    "name": "Milan, Italy"
+  },
+  {
+    "id": 26,
+    "lat": 47.37,
+    "lng": 8.54,
+    "radius": 3000,
+    "name": "Zurich, Switzerland"
+  },
+  {
+    "id": 27,
+    "lat": 48.2,
+    "lng": 16.37,
+    "radius": 3000,
+    "name": "Vienna, Austria"
+  },
+  {
+    "id": 28,
+    "lat": 52.52,
+    "lng": 13.4,
+    "radius": 3000,
+    "name": "Berlin, Germany"
+  },
+  {
+    "id": 29,
+    "lat": 48.13,
+    "lng": 11.58,
+    "radius": 3000,
+    "name": "Munich, Germany"
+  },
+  {
+    "id": 30,
+    "lat": 52.36,
+    "lng": 4.9,
+    "radius": 3000,
+    "name": "Amsterdam, Netherlands"
+  },
+  {
+    "id": 31,
+    "lat": 59.32,
+    "lng": 18.06,
+    "radius": 3000,
+    "name": "Stockholm, Sweden"
+  },
+  {
+    "id": 32,
+    "lat": 59.91,
+    "lng": 10.75,
+    "radius": 3000,
+    "name": "Oslo, Norway"
+  },
+  {
+    "id": 33,
+    "lat": 55.67,
+    "lng": 12.56,
+    "radius": 3000,
+    "name": "Copenhagen, Denmark"
+  },
+  {
+    "id": 34,
+    "lat": 60.16,
+    "lng": 24.93,
+    "radius": 3000,
+    "name": "Helsinki, Finland"
+  },
+  {
+    "id": 35,
+    "lat": 55.75,
+    "lng": 37.61,
+    "radius": 3000,
+    "name": "Moscow, Russia"
+  },
+  {
+    "id": 36,
+    "lat": 50.45,
+    "lng": 30.52,
+    "radius": 3000,
+    "name": "Kyiv, Ukraine"
+  },
+  {
+    "id": 37,
+    "lat": 30.04,
+    "lng": 31.23,
+    "radius": 3000,
+    "name": "Cairo, Egypt"
+  },
+  {
+    "id": 38,
+    "lat": -33.92,
+    "lng": 18.42,
+    "radius": 3000,
+    "name": "Cape Town, South Africa"
+  },
+  {
+    "id": 39,
+    "lat": -26.2,
+    "lng": 28.04,
+    "radius": 3000,
+    "name": "Johannesburg, South Africa"
+  },
+  {
+    "id": 40,
+    "lat": -1.29,
+    "lng": 36.82,
+    "radius": 3000,
+    "name": "Nairobi, Kenya"
+  },
+  {
+    "id": 41,
+    "lat": 9.02,
+    "lng": 38.74,
+    "radius": 3000,
+    "name": "Addis Ababa, Ethiopia"
+  },
+  {
+    "id": 42,
+    "lat": 6.52,
+    "lng": 3.37,
+    "radius": 3000,
+    "name": "Lagos, Nigeria"
+  },
+  {
+    "id": 43,
+    "lat": 5.6,
+    "lng": -0.18,
+    "radius": 3000,
+    "name": "Accra, Ghana"
+  },
+  {
+    "id": 44,
+    "lat": 14.69,
+    "lng": -17.44,
+    "radius": 3000,
+    "name": "Dakar, Senegal"
+  },
+  {
+    "id": 45,
+    "lat": 34.02,
+    "lng": -6.83,
+    "radius": 3000,
+    "name": "Rabat, Morocco"
+  },
+  {
+    "id": 46,
+    "lat": 36.8,
+    "lng": 10.18,
+    "radius": 3000,
+    "name": "Tunis, Tunisia"
+  },
+  {
+    "id": 47,
+    "lat": 39.9,
+    "lng": 116.4,
+    "radius": 3000,
+    "name": "Beijing, China"
+  },
+  {
+    "id": 48,
+    "lat": 31.23,
+    "lng": 121.47,
+    "radius": 3000,
+    "name": "Shanghai, China"
+  },
+  {
+    "id": 49,
+    "lat": 30.57,
+    "lng": 104.06,
+    "radius": 3000,
+    "name": "Chengdu, China"
+  },
+  {
+    "id": 50,
+    "lat": 35.67,
+    "lng": 139.65,
+    "radius": 3000,
+    "name": "Tokyo, Japan"
+  },
+  {
+    "id": 51,
+    "lat": 34.69,
+    "lng": 135.5,
+    "radius": 3000,
+    "name": "Osaka, Japan"
+  },
+  {
+    "id": 52,
+    "lat": 37.56,
+    "lng": 126.97,
+    "radius": 3000,
+    "name": "Seoul, South Korea"
+  },
+  {
+    "id": 53,
+    "lat": 25.03,
+    "lng": 121.56,
+    "radius": 3000,
+    "name": "Taipei, Taiwan"
+  },
+  {
+    "id": 54,
+    "lat": 22.31,
+    "lng": 114.16,
+    "radius": 3000,
+    "name": "Hong Kong"
+  },
+  {
+    "id": 55,
+    "lat": 14.59,
+    "lng": 120.98,
+    "radius": 3000,
+    "name": "Manila, Philippines"
+  },
+  {
+    "id": 56,
+    "lat": 21.02,
+    "lng": 105.83,
+    "radius": 3000,
+    "name": "Hanoi, Vietnam"
+  },
+  {
+    "id": 57,
+    "lat": 10.76,
+    "lng": 106.66,
+    "radius": 3000,
+    "name": "Ho Chi Minh City, Vietnam"
+  },
+  {
+    "id": 58,
+    "lat": 13.75,
+    "lng": 100.5,
+    "radius": 3000,
+    "name": "Bangkok, Thailand"
+  },
+  {
+    "id": 59,
+    "lat": 3.13,
+    "lng": 101.68,
+    "radius": 3000,
+    "name": "Kuala Lumpur, Malaysia"
+  },
+  {
+    "id": 60,
+    "lat": 1.35,
+    "lng": 103.81,
+    "radius": 3000,
+    "name": "Singapore"
+  },
+  {
+    "id": 61,
+    "lat": -6.2,
+    "lng": 106.81,
+    "radius": 3000,
+    "name": "Jakarta, Indonesia"
+  },
+  {
+    "id": 62,
+    "lat": -8.4,
+    "lng": 115.18,
+    "radius": 3000,
+    "name": "Bali, Indonesia"
+  },
+  {
+    "id": 63,
+    "lat": 28.61,
+    "lng": 77.2,
+    "radius": 3000,
+    "name": "New Delhi, India"
+  },
+  {
+    "id": 64,
+    "lat": 19.07,
+    "lng": 72.87,
+    "radius": 3000,
+    "name": "Mumbai, India"
+  },
+  {
+    "id": 65,
+    "lat": 12.97,
+    "lng": 77.59,
+    "radius": 3000,
+    "name": "Bangalore, India"
+  },
+  {
+    "id": 66,
+    "lat": 22.57,
+    "lng": 88.36,
+    "radius": 3000,
+    "name": "Kolkata, India"
+  },
+  {
+    "id": 67,
+    "lat": 33.68,
+    "lng": 73.04,
+    "radius": 3000,
+    "name": "Islamabad, Pakistan"
+  },
+  {
+    "id": 68,
+    "lat": 24.86,
+    "lng": 67,
+    "radius": 3000,
+    "name": "Karachi, Pakistan"
+  },
+  {
+    "id": 69,
+    "lat": 23.81,
+    "lng": 90.41,
+    "radius": 3000,
+    "name": "Dhaka, Bangladesh"
+  },
+  {
+    "id": 70,
+    "lat": 27.71,
+    "lng": 85.32,
+    "radius": 3000,
+    "name": "Kathmandu, Nepal"
+  },
+  {
+    "id": 71,
+    "lat": 34.52,
+    "lng": 69.17,
+    "radius": 3000,
+    "name": "Kabul, Afghanistan"
+  },
+  {
+    "id": 72,
+    "lat": 35.68,
+    "lng": 51.38,
+    "radius": 3000,
+    "name": "Tehran, Iran"
+  },
+  {
+    "id": 73,
+    "lat": 33.31,
+    "lng": 44.36,
+    "radius": 3000,
+    "name": "Baghdad, Iraq"
+  },
+  {
+    "id": 74,
+    "lat": 24.71,
+    "lng": 46.67,
+    "radius": 3000,
+    "name": "Riyadh, Saudi Arabia"
+  },
+  {
+    "id": 75,
+    "lat": 25.2,
+    "lng": 55.27,
+    "radius": 3000,
+    "name": "Dubai, UAE"
+  },
+  {
+    "id": 76,
+    "lat": 31.95,
+    "lng": 35.92,
+    "radius": 3000,
+    "name": "Amman, Jordan"
+  },
+  {
+    "id": 77,
+    "lat": 33.88,
+    "lng": 35.49,
+    "radius": 3000,
+    "name": "Beirut, Lebanon"
+  },
+  {
+    "id": 78,
+    "lat": 31.76,
+    "lng": 35.21,
+    "radius": 3000,
+    "name": "Jerusalem"
+  },
+  {
+    "id": 79,
+    "lat": 39.92,
+    "lng": 32.85,
+    "radius": 3000,
+    "name": "Ankara, Turkey"
+  },
+  {
+    "id": 80,
+    "lat": 41,
+    "lng": 28.97,
+    "radius": 3000,
+    "name": "Istanbul, Turkey"
+  },
+  {
+    "id": 81,
+    "lat": -33.86,
+    "lng": 151.2,
+    "radius": 3000,
+    "name": "Sydney, Australia"
+  },
+  {
+    "id": 82,
+    "lat": -37.81,
+    "lng": 144.96,
+    "radius": 3000,
+    "name": "Melbourne, Australia"
+  },
+  {
+    "id": 83,
+    "lat": -27.46,
+    "lng": 153.02,
+    "radius": 3000,
+    "name": "Brisbane, Australia"
+  },
+  {
+    "id": 84,
+    "lat": -31.95,
+    "lng": 115.86,
+    "radius": 3000,
+    "name": "Perth, Australia"
+  },
+  {
+    "id": 85,
+    "lat": -36.84,
+    "lng": 174.76,
+    "radius": 3000,
+    "name": "Auckland, New Zealand"
+  },
+  {
+    "id": 86,
+    "lat": -41.28,
+    "lng": 174.77,
+    "radius": 3000,
+    "name": "Wellington, New Zealand"
+  },
+  {
+    "id": 87,
+    "lat": -18.14,
+    "lng": 178.43,
+    "radius": 3000,
+    "name": "Suva, Fiji"
+  },
+  {
+    "id": 88,
+    "lat": -9.44,
+    "lng": 147.18,
+    "radius": 3000,
+    "name": "Port Moresby, Papua New Guinea"
+  }
+]
