@@ -20,7 +20,7 @@ const Dashboard = () => {
   const { t, i18n } = useTranslation();
   const [riskZones, setRiskZones] = useState([]);
   const [activeZone, setActiveZone] = useState(null);
-  
+
   // State for map view
   const [mapCenter, setMapCenter] = useState([20.0, 0.0]);
   const [mapZoom, setMapZoom] = useState(2);
@@ -59,9 +59,9 @@ const Dashboard = () => {
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <h1>{t('dashboard_title')}</h1>
             <div className="language-toggle" style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-              <Globe size={16} color="var(--text-muted)"/>
-              <select 
-                onChange={(e) => i18n.changeLanguage(e.target.value)} 
+              <Globe size={16} color="var(--text-muted)" />
+              <select
+                onChange={(e) => i18n.changeLanguage(e.target.value)}
                 value={i18n.language}
                 style={{ background: 'rgba(0,0,0,0.2)', color: 'white', border: '1px solid var(--border-color)', borderRadius: '4px', padding: '4px', fontSize: '12px' }}
               >
@@ -73,12 +73,12 @@ const Dashboard = () => {
           </div>
           <p>Real-time Landslide Risk Monitoring</p>
         </div>
-        
+
         <div className="sidebar-content">
           <h2 style={{ fontSize: '14px', textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: '16px', letterSpacing: '1px' }}>
             {t('active_risk_forecasts')}
           </h2>
-          
+
           {riskZones.length === 0 ? (
             <p style={{ color: 'var(--text-muted)', fontSize: '14px' }}>{t('loading_risk_zones')}</p>
           ) : (
@@ -87,8 +87,8 @@ const Dashboard = () => {
               const percB = b.risk_percentage || 0;
               return percB - percA; // Sort descending
             }).map((zone) => (
-              <div 
-                key={zone.id} 
+              <div
+                key={zone.id}
                 className={`risk-card ${zone.risk_level} ${activeZone === zone.id ? 'active' : ''}`}
                 onMouseEnter={() => setActiveZone(zone.id)}
                 onMouseLeave={() => setActiveZone(null)}
@@ -111,9 +111,9 @@ const Dashboard = () => {
               </div>
             ))
           )}
-          
+
           <EmergencyPrioritization />
-          
+
           <ReportIncident />
         </div>
       </div>
@@ -126,7 +126,7 @@ const Dashboard = () => {
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
             url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
           />
-          
+
           {[...riskZones].sort((a, b) => {
             const percA = a.risk_percentage || 0;
             const percB = b.risk_percentage || 0;
@@ -140,35 +140,35 @@ const Dashboard = () => {
             let finalRadius = activeZone === zone.id ? pixelRadius * 1.3 : pixelRadius;
 
             return (
-            <CircleMarker
-              key={zone.id}
-              center={[zone.lat, zone.lng]}
-              radius={finalRadius}
-              eventHandlers={{
-                mouseover: () => setActiveZone(zone.id),
-                mouseout: () => setActiveZone(null),
-                click: () => {
-                  setMapCenter([zone.lat, zone.lng]);
-                  setMapZoom(9);
-                }
-              }}
-              pathOptions={{ 
-                color: getRiskColor(zone.risk_level),
-                fillColor: getRiskColor(zone.risk_level),
-                fillOpacity: (zone.risk_level === 'High' || activeZone === zone.id) ? 0.8 : 0.4,
-                weight: (zone.risk_level === 'High' || activeZone === zone.id) ? 3 : 2
-              }}
-              className={(zone.risk_level === 'High' || activeZone === zone.id) ? "pulse-circle high-risk" : "pulse-circle"}
-            >
-              <Tooltip className="glass-tooltip" sticky direction="top">
-                <div className="tooltip-content">
-                  <strong>{zone.name}</strong>
-                  <div className="tooltip-risk">
-                    Risk Level: <span className={`badge ${zone.risk_level}`}>{zone.risk_percentage || 0}% ({zone.risk_level})</span>
+              <CircleMarker
+                key={zone.id}
+                center={[zone.lat, zone.lng]}
+                radius={finalRadius}
+                eventHandlers={{
+                  mouseover: () => setActiveZone(zone.id),
+                  mouseout: () => setActiveZone(null),
+                  click: () => {
+                    setMapCenter([zone.lat, zone.lng]);
+                    setMapZoom(9);
+                  }
+                }}
+                pathOptions={{
+                  color: getRiskColor(zone.risk_level),
+                  fillColor: getRiskColor(zone.risk_level),
+                  fillOpacity: (zone.risk_level === 'High' || activeZone === zone.id) ? 0.8 : 0.4,
+                  weight: (zone.risk_level === 'High' || activeZone === zone.id) ? 3 : 2
+                }}
+                className={(zone.risk_level === 'High' || activeZone === zone.id) ? "pulse-circle high-risk" : "pulse-circle"}
+              >
+                <Tooltip className="glass-tooltip" sticky direction="top">
+                  <div className="tooltip-content">
+                    <strong>{zone.name}</strong>
+                    <div className="tooltip-risk">
+                      Risk Level: <span className={`badge ${zone.risk_level}`}>{zone.risk_percentage || 0}% ({zone.risk_level})</span>
+                    </div>
                   </div>
-                </div>
-              </Tooltip>
-            </CircleMarker>
+                </Tooltip>
+              </CircleMarker>
             );
           })}
         </MapContainer>

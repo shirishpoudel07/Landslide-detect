@@ -40,23 +40,22 @@ const startImdWeatherCron = () => {
             }
 
             // Insert into SQLite weather_logs table
-            try {
-                const stmt = db.prepare(`INSERT INTO weather_logs (temperature, humidity, rainfall) VALUES (?, ?, ?)`);
-                
-                if (weatherData && weatherData.cities) {
-                    weatherData.cities.forEach(city => {
-                        stmt.run(city.temperature, city.humidity, city.rainfall, (err) => {
+            // Uses db.run() — correct API for the async 'sqlite3' package
+            if (weatherData && weatherData.cities) {
+                weatherData.cities.forEach(city => {
+                    db.run(
+                        `INSERT INTO weather_logs (temperature, humidity, rainfall) VALUES (?, ?, ?)`,
+                        [city.temperature, city.humidity, city.rainfall],
+                        (err) => {
                             if (err) {
-                                console.error('Failed to insert weather log:', err.message);
+                                // Table may not exist yet — non-fatal for prototype
+                                console.error(`[imdWeatherJob] Failed to insert weather log for ${city.name}:`, err.message);
                             } else {
                                 console.log(`Saved weather log for ${city.name} - Temp: ${city.temperature.toFixed(1)}°C, Rain: ${city.rainfall.toFixed(1)}mm`);
                             }
-                        });
-                    });
-                }
-                stmt.finalize();
-            } catch (dbError) {
-                console.error('[imdWeatherJob] DB insert failed (weather_logs table may not be initialized):', dbError.message);
+                        }
+                    );
+                });
             }
             
         } catch (error) {

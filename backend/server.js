@@ -115,7 +115,7 @@ app.get('/api/risk-zones', async (req, res) => {
             const lats = chunk.map(loc => loc.lat).join(',');
             const lngs = chunk.map(loc => loc.lng).join(',');
             const apiUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lats}&longitude=${lngs}&current=precipitation,soil_moisture_0_to_7cm`;
-            return axios.get(apiUrl).then(res => ({ chunk, data: Array.isArray(res.data) ? res.data : [res.data] }));
+            return axios.get(apiUrl).then(axiosRes => ({ chunk, data: Array.isArray(axiosRes.data) ? axiosRes.data : [axiosRes.data] }));
         });
 
         const results = await Promise.all(fetchPromises);

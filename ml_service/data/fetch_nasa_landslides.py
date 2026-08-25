@@ -48,8 +48,9 @@ for col in ['latitude', 'longitude', 'landslide_trigger', 'trigger', 'landslide_
 
 ner_df = ner_df[cols_to_keep]
 
-# Save to real_landslides.csv
-output_file = "real_landslides.csv"
+# Save to real_landslides.csv in the same directory as this script
+script_dir = os.path.dirname(os.path.abspath(__file__))
+output_file = os.path.join(script_dir, "real_landslides.csv")
 ner_df.to_csv(output_file, index=False)
 
 print(f"Summary: Extracted {len(ner_df)} historical landslide records for the North Eastern Region.")
