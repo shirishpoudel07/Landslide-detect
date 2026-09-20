@@ -3,6 +3,7 @@ const sqlite3 = require('sqlite3').verbose();
 const cors = require('cors');
 const path = require('path');
 const dotenv = require('dotenv');
+const { calculateRiskScore, classifyRisk } = require('./riskScoring');
 const { startWeatherRiskCron } = require('./cron/weatherRiskJob');
 const { startImdWeatherCron } = require('./cron/imdWeatherJob');
 
@@ -125,33 +126,22 @@ app.get('/api/risk-zones', async (req, res) => {
             const enrichedChunk = chunk.map((loc, index) => {
                 const locData = data[index] || data[0] || {};
                 const current = locData.current || {};
-                
-                const precip = current.precipitation || 0;
-                const soilMoisture = current.soil_moisture_0_to_7cm || 0;
 
-                // Add inherent topographical risk for historically dangerous zones
-                const dangerousZones = ['Nepal', 'Japan', 'Peru', 'Indonesia', 'Philippines', 'Guatemala', 'Ecuador', 'Colombia'];
-                let inherentRisk = 10;
-                if (dangerousZones.some(z => loc.name.includes(z))) {
-                    inherentRisk = 55; // Huge baseline risk for naturally dangerous terrain
-                }
-
-                // Calculate a 0-100% risk percentage
-                let rawRisk = (precip * 15) + (soilMoisture * 120) + inherentRisk;
-                let risk_percentage = Math.min(100, Math.round(rawRisk));
-
-                let risk = 'Low';
-                // Thresholds for colors
-                if (risk_percentage >= 75) {
-                    risk = 'High'; // Red
-                } else if (risk_percentage >= 40) {
-                    risk = 'Medium'; // Yellow
-                }
+                const precip = Number(current.precipitation || 0);
+                const soilMoisture = Number(current.soil_moisture_0_to_7cm || 0);
+                const risk_percentage = calculateRiskScore({
+                    precipitation: precip,
+                    soilMoisture,
+                    lat: loc.lat,
+                    lng: loc.lng,
+                    name: loc.name
+                });
+                const risk_level = classifyRisk(risk_percentage);
 
                 return {
                     ...loc,
-                    risk_level: risk,
-                    risk_percentage: risk_percentage,
+                    risk_level,
+                    risk_percentage,
                     precipitation_mm: precip,
                     soil_moisture: soilMoisture
                 };

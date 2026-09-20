@@ -20,6 +20,8 @@ const Dashboard = () => {
   const { t, i18n } = useTranslation();
   const [riskZones, setRiskZones] = useState([]);
   const [activeZone, setActiveZone] = useState(null);
+  const [lastUpdated, setLastUpdated] = useState(new Date());
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
   // State for map view
   const [mapCenter, setMapCenter] = useState([20.0, 0.0]);
@@ -27,16 +29,19 @@ const Dashboard = () => {
 
   useEffect(() => {
     const fetchRiskZones = async () => {
+      setIsRefreshing(true);
       try {
         const response = await axios.get('http://localhost:3000/api/risk-zones');
         setRiskZones(response.data.zones || []);
+        setLastUpdated(new Date());
       } catch (error) {
         console.error("Error fetching risk zones:", error);
+      } finally {
+        setIsRefreshing(false);
       }
     };
 
     fetchRiskZones();
-    // Poll every 60 seconds
     const interval = setInterval(fetchRiskZones, 60000);
     return () => clearInterval(interval);
   }, []);
@@ -44,26 +49,32 @@ const Dashboard = () => {
   // Helper to determine circle color based on risk level
   const getRiskColor = (level) => {
     switch (level) {
-      case 'High': return '#ef4444'; // red-500
-      case 'Medium': return '#eab308'; // yellow-500
-      case 'Low': return '#22c55e'; // green-500
-      default: return '#3b82f6';
+      case 'High': return '#ef4444';
+      case 'Medium': return '#fbbf24';
+      case 'Low': return '#34d399';
+      default: return '#60a5fa';
     }
   };
 
+  const activeRiskCount = riskZones.filter((zone) => zone.risk_level === 'High').length;
+  const mediumRiskCount = riskZones.filter((zone) => zone.risk_level === 'Medium').length;
+  const safeZoneCount = riskZones.filter((zone) => zone.risk_level === 'Low').length;
+  const formattedUpdatedAt = lastUpdated.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
   return (
     <div className="dashboard-container">
-      {/* Sidebar */}
-      <div className="sidebar">
-        <div className="sidebar-header">
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <h1>{t('dashboard_title')}</h1>
-            <div className="language-toggle" style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+      <aside className="sidebar">
+        <header className="sidebar-header">
+          <div className="header-top">
+            <div>
+              <p className="eyebrow">Regional monitoring</p>
+              <h1>{t('dashboard_title')}</h1>
+            </div>
+            <div className="language-toggle">
               <Globe size={16} color="var(--text-muted)" />
               <select
                 onChange={(e) => i18n.changeLanguage(e.target.value)}
                 value={i18n.language}
-                style={{ background: 'rgba(0,0,0,0.2)', color: 'white', border: '1px solid var(--border-color)', borderRadius: '4px', padding: '4px', fontSize: '12px' }}
               >
                 <option value="en">English</option>
                 <option value="hi">हिन्दी</option>
@@ -71,21 +82,43 @@ const Dashboard = () => {
               </select>
             </div>
           </div>
-          <p>Real-time Landslide Risk Monitoring</p>
-        </div>
+
+          <div className="header-meta">
+            <span className={`status-pill ${isRefreshing ? 'refreshing' : ''}`}>
+              <span className="status-dot" /> {isRefreshing ? 'Refreshing' : 'Live feed'}
+            </span>
+            <span className="last-updated">Updated {formattedUpdatedAt}</span>
+          </div>
+        </header>
 
         <div className="sidebar-content">
-          <h2 style={{ fontSize: '14px', textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: '16px', letterSpacing: '1px' }}>
-            {t('active_risk_forecasts')}
-          </h2>
+          <div className="dashboard-summary">
+            <div className="summary-card danger">
+              <span className="summary-label">Critical</span>
+              <strong className="summary-value">{activeRiskCount}</strong>
+            </div>
+            <div className="summary-card warning">
+              <span className="summary-label">Watch</span>
+              <strong className="summary-value">{mediumRiskCount}</strong>
+            </div>
+            <div className="summary-card success">
+              <span className="summary-label">Stable</span>
+              <strong className="summary-value">{safeZoneCount}</strong>
+            </div>
+          </div>
+
+          <div className="section-header">
+            <h2>{t('active_risk_forecasts')}</h2>
+            <span className="zone-count">{riskZones.length}</span>
+          </div>
 
           {riskZones.length === 0 ? (
-            <p style={{ color: 'var(--text-muted)', fontSize: '14px' }}>{t('loading_risk_zones')}</p>
+            <p className="empty-state">{t('loading_risk_zones')}</p>
           ) : (
             [...riskZones].sort((a, b) => {
               const percA = a.risk_percentage || 0;
               const percB = b.risk_percentage || 0;
-              return percB - percA; // Sort descending
+              return percB - percA;
             }).map((zone) => (
               <div
                 key={zone.id}
@@ -96,7 +129,6 @@ const Dashboard = () => {
                   setMapCenter([zone.lat, zone.lng]);
                   setMapZoom(9);
                 }}
-                style={{ cursor: 'pointer' }}
               >
                 <div className="risk-card-header">
                   <span className="risk-card-title">{zone.name}</span>
@@ -113,31 +145,36 @@ const Dashboard = () => {
           )}
 
           <EmergencyPrioritization />
-
           <ReportIncident />
         </div>
-      </div>
+      </aside>
 
-      {/* Main Map Area */}
-      <div className="map-container">
+      <main className="map-container">
+        <div className="map-toolbar">
+          <span className="toolbar-label">Situational overview</span>
+          <span className="toolbar-value">
+            {activeZone ? 'Zone focus enabled' : 'Global network'}
+          </span>
+        </div>
+
         <MapContainer center={mapCenter} zoom={mapZoom} style={{ height: '100%', width: '100%' }}>
           <MapUpdater center={mapCenter} zoom={mapZoom} />
           <TileLayer
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
-            url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+            attribution='Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+            url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
           />
 
           {[...riskZones].sort((a, b) => {
             const percA = a.risk_percentage || 0;
             const percB = b.risk_percentage || 0;
-            return percA - percB; // Sort ascending so High % is rendered last (on top)
+            return percA - percB;
           }).map(zone => {
-            // Fixed pixel sizes for CircleMarker regardless of zoom
-            let pixelRadius = 5; // Green/Low
-            if (zone.risk_level === 'High') pixelRadius = 14; // Red/High
-            else if (zone.risk_level === 'Medium') pixelRadius = 9; // Yellow/Medium
+            let pixelRadius = 5;
+            if (zone.risk_level === 'High') pixelRadius = 14;
+            else if (zone.risk_level === 'Medium') pixelRadius = 9;
 
-            let finalRadius = activeZone === zone.id ? pixelRadius * 1.3 : pixelRadius;
+            const finalRadius = activeZone === zone.id ? pixelRadius * 1.3 : pixelRadius;
+            const isFocusZone = activeZone === zone.id;
 
             return (
               <CircleMarker
@@ -155,10 +192,11 @@ const Dashboard = () => {
                 pathOptions={{
                   color: getRiskColor(zone.risk_level),
                   fillColor: getRiskColor(zone.risk_level),
-                  fillOpacity: (zone.risk_level === 'High' || activeZone === zone.id) ? 0.8 : 0.4,
-                  weight: (zone.risk_level === 'High' || activeZone === zone.id) ? 3 : 2
+                  fillOpacity: isFocusZone ? 0.9 : zone.risk_level === 'High' ? 0.75 : 0.42,
+                  weight: isFocusZone ? 3.5 : zone.risk_level === 'High' ? 2.8 : 2,
+                  opacity: isFocusZone ? 1 : 0.85,
                 }}
-                className={(zone.risk_level === 'High' || activeZone === zone.id) ? "pulse-circle high-risk" : "pulse-circle"}
+                className={isFocusZone ? "pulse-circle high-risk ring-focus" : zone.risk_level === 'High' ? "pulse-circle high-risk" : "pulse-circle"}
               >
                 <Tooltip className="glass-tooltip" sticky direction="top">
                   <div className="tooltip-content">
@@ -172,7 +210,7 @@ const Dashboard = () => {
             );
           })}
         </MapContainer>
-      </div>
+      </main>
     </div>
   );
 };
