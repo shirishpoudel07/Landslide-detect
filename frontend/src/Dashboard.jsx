@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { MapContainer, TileLayer, CircleMarker, Tooltip, useMap } from 'react-leaflet';
 import axios from 'axios';
-import { Activity, Globe } from 'lucide-react';
+import { Activity, Globe, Moon, Sun } from 'lucide-react';
 import ReportIncident from './ReportIncident';
 import EmergencyPrioritization from './EmergencyPrioritization';
 import { useTranslation } from 'react-i18next';
@@ -22,6 +22,9 @@ const Dashboard = () => {
   const [activeZone, setActiveZone] = useState(null);
   const [lastUpdated, setLastUpdated] = useState(new Date());
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(() => {
+    return localStorage.getItem('cmr-theme') === 'dark';
+  });
 
   // State for map view
   const [mapCenter, setMapCenter] = useState([20.0, 0.0]);
@@ -61,8 +64,13 @@ const Dashboard = () => {
   const safeZoneCount = riskZones.filter((zone) => zone.risk_level === 'Low').length;
   const formattedUpdatedAt = lastUpdated.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
+  useEffect(() => {
+    document.documentElement.dataset.theme = isDarkMode ? 'dark' : 'light';
+    localStorage.setItem('cmr-theme', isDarkMode ? 'dark' : 'light');
+  }, [isDarkMode]);
+
   return (
-    <div className="dashboard-container">
+    <div className={`dashboard-container ${isDarkMode ? 'dark-mode' : ''}`}>
       <aside className="sidebar">
         <header className="sidebar-header">
           <div className="header-top">
@@ -80,6 +88,15 @@ const Dashboard = () => {
                 <option value="hi">हिन्दी</option>
                 <option value="as">অসমীয়া</option>
               </select>
+              <button
+                type="button"
+                className="theme-toggle"
+                aria-label={isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}
+                title={isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}
+                onClick={() => setIsDarkMode((current) => !current)}
+              >
+                {isDarkMode ? <Sun size={15} /> : <Moon size={15} />}
+              </button>
             </div>
           </div>
 
