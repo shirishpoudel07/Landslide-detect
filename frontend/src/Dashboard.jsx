@@ -140,11 +140,21 @@ const Dashboard = () => {
               <div
                 key={zone.id}
                 className={`risk-card ${zone.risk_level} ${activeZone === zone.id ? 'active' : ''}`}
+                role="button"
+                tabIndex={0}
+                aria-label={`Focus map on ${zone.name}`}
                 onMouseEnter={() => setActiveZone(zone.id)}
                 onMouseLeave={() => setActiveZone(null)}
                 onClick={() => {
                   setMapCenter([zone.lat, zone.lng]);
                   setMapZoom(9);
+                }}
+                onKeyDown={(event) => {
+                  if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault();
+                    setMapCenter([zone.lat, zone.lng]);
+                    setMapZoom(9);
+                  }
                 }}
               >
                 <div className="risk-card-header">
