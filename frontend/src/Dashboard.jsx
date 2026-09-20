@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { MapContainer, TileLayer, CircleMarker, Tooltip, useMap } from 'react-leaflet';
 import axios from 'axios';
-import { Activity, Globe, Moon, Sun } from 'lucide-react';
+import { Activity, Globe, Mountain, Moon, Sun } from 'lucide-react';
 import ReportIncident from './ReportIncident';
 import EmergencyPrioritization from './EmergencyPrioritization';
 import { useTranslation } from 'react-i18next';
@@ -166,6 +166,10 @@ const Dashboard = () => {
                     <Activity size={14} color="var(--text-muted)" />
                     <span>{zone.risk_level === 'High' ? t('high_probability') : zone.risk_level === 'Medium' ? t('medium_probability') : t('low_probability')}</span>
                   </div>
+                  <div className="detail-row terrain-detail">
+                    <Mountain size={14} color="var(--text-muted)" />
+                    <span>{Number(zone.slope_degrees || 0).toFixed(1)}° slope · {zone.elevation_relief_m || 0}m relief</span>
+                  </div>
                 </div>
               </div>
             ))
@@ -230,6 +234,9 @@ const Dashboard = () => {
                     <strong>{zone.name}</strong>
                     <div className="tooltip-risk">
                       Risk Level: <span className={`badge ${zone.risk_level}`}>{zone.risk_percentage || 0}% ({zone.risk_level})</span>
+                    </div>
+                    <div className="tooltip-terrain">
+                      Terrain: {Number(zone.slope_degrees || 0).toFixed(1)}° slope · {zone.elevation_relief_m || 0}m local relief
                     </div>
                   </div>
                 </Tooltip>

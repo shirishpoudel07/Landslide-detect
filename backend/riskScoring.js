@@ -21,14 +21,21 @@ function getRegionBaseRisk(name = '') {
   return matchedKey ? REGION_RISK_BASE[matchedKey] : REGION_RISK_BASE.default;
 }
 
-function calculateRiskScore({ precipitation = 0, soilMoisture = 0, lat = 0, lng = 0, name = '' }) {
-  const rainfallComponent = precipitation * 0.35;
-  const moistureComponent = soilMoisture * 0.35;
-  const latitudeComponent = Math.abs(lat) > 30 ? 10 : 4;
-  const longitudeComponent = Math.abs(lng) > 90 ? 10 : 3;
+function calculateRiskScore({ precipitation = 0, soilMoisture = 0, slopeDegrees = 15, elevationRelief = 200, name = '' }) {
+  const rainfallComponent = Math.min(35, precipitation * 0.55);
+  const moistureComponent = Math.min(25, soilMoisture * 0.3);
   const regionBaseRisk = getRegionBaseRisk(name);
+  const terrainRelief = Math.max(0, Number(elevationRelief) || 0);
+  const slope = Math.max(0, Number(slopeDegrees) || 0);
 
-  const totalRisk = rainfallComponent + moistureComponent + latitudeComponent + longitudeComponent + regionBaseRisk;
+  // Rain and soil moisture are only meaningful when the local terrain can fail.
+  if (slope < 3 && terrainRelief < 40) {
+    return normalizeRiskScore(Math.round((rainfallComponent + moistureComponent) * 0.25), 0, 20);
+  }
+
+  const terrainFactor = slope < 8 ? 0.45 : slope <= 35 ? 1 : 0.75;
+  const reliefComponent = Math.min(15, terrainRelief / 40);
+  const totalRisk = (rainfallComponent + moistureComponent + regionBaseRisk + reliefComponent) * terrainFactor;
   return normalizeRiskScore(Math.round(totalRisk), 0, 100);
 }
 

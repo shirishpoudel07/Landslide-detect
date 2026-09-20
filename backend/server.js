@@ -105,8 +105,8 @@ app.get('/api/risk-zones', async (req, res) => {
     }
 
     try {
-        // Chunk locations into batches of 50 to avoid URL limits
-        const chunkSize = 50;
+        // Five elevation samples per location keeps each Open-Meteo request within its point limit.
+        const chunkSize = 20;
         const chunks = [];
         for (let i = 0; i < baseLocations.length; i += chunkSize) {
             chunks.push(baseLocations.slice(i, i + chunkSize));
@@ -115,25 +115,54 @@ app.get('/api/risk-zones', async (req, res) => {
         const fetchPromises = chunks.map(chunk => {
             const lats = chunk.map(loc => loc.lat).join(',');
             const lngs = chunk.map(loc => loc.lng).join(',');
-            const apiUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lats}&longitude=${lngs}&current=precipitation,soil_moisture_0_to_7cm`;
-            return axios.get(apiUrl).then(axiosRes => ({ chunk, data: Array.isArray(axiosRes.data) ? axiosRes.data : [axiosRes.data] }));
+            const weatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lats}&longitude=${lngs}&current=precipitation,soil_moisture_0_to_7cm`;
+            const terrainSamples = chunk.flatMap((loc) => [
+                [loc.lat, loc.lng],
+                [loc.lat + 0.05, loc.lng],
+                [loc.lat - 0.05, loc.lng],
+                [loc.lat, loc.lng + 0.05],
+                [loc.lat, loc.lng - 0.05]
+            ]);
+            const terrainLats = terrainSamples.map(([lat]) => lat).join(',');
+            const terrainLngs = terrainSamples.map(([, lng]) => lng).join(',');
+            const elevationUrl = `https://api.open-meteo.com/v1/elevation?latitude=${terrainLats}&longitude=${terrainLngs}`;
+
+            return Promise.all([axios.get(weatherUrl), axios.get(elevationUrl)])
+                .then(([weatherRes, elevationRes]) => ({
+                    chunk,
+                    weather: Array.isArray(weatherRes.data) ? weatherRes.data : [weatherRes.data],
+                    elevations: elevationRes.data.elevation || []
+                }));
         });
 
         const results = await Promise.all(fetchPromises);
         let allEnrichedZones = [];
 
-        results.forEach(({ chunk, data }) => {
+        results.forEach(({ chunk, weather, elevations }) => {
             const enrichedChunk = chunk.map((loc, index) => {
-                const locData = data[index] || data[0] || {};
+                const locData = weather[index] || weather[0] || {};
                 const current = locData.current || {};
 
                 const precip = Number(current.precipitation || 0);
                 const soilMoisture = Number(current.soil_moisture_0_to_7cm || 0);
+                const sampleStart = index * 5;
+                const localElevations = elevations.slice(sampleStart, sampleStart + 5).map(Number).filter(Number.isFinite);
+                const centerElevation = localElevations[0] || 0;
+                const elevationRelief = localElevations.length > 1
+                    ? Math.max(...localElevations.slice(1)) - Math.min(...localElevations.slice(1))
+                    : 0;
+                const northSouthSlope = localElevations.length >= 3
+                    ? Math.abs(localElevations[1] - localElevations[2]) / 11100
+                    : 0;
+                const eastWestSlope = localElevations.length >= 5
+                    ? Math.abs(localElevations[3] - localElevations[4]) / (11100 * Math.cos(loc.lat * Math.PI / 180))
+                    : 0;
+                const slopeDegrees = Math.atan(Math.max(northSouthSlope, eastWestSlope)) * (180 / Math.PI);
                 const risk_percentage = calculateRiskScore({
                     precipitation: precip,
                     soilMoisture,
-                    lat: loc.lat,
-                    lng: loc.lng,
+                    slopeDegrees,
+                    elevationRelief,
                     name: loc.name
                 });
                 const risk_level = classifyRisk(risk_percentage);
@@ -143,7 +172,10 @@ app.get('/api/risk-zones', async (req, res) => {
                     risk_level,
                     risk_percentage,
                     precipitation_mm: precip,
-                    soil_moisture: soilMoisture
+                    soil_moisture: soilMoisture,
+                    elevation_m: Math.round(centerElevation),
+                    elevation_relief_m: Math.round(elevationRelief),
+                    slope_degrees: Number(slopeDegrees.toFixed(1))
                 };
             });
             allEnrichedZones = allEnrichedZones.concat(enrichedChunk);

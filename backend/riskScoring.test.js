@@ -6,8 +6,8 @@ test('high-risk zones are scored as high when rainfall, moisture, and terrain ex
   const riskScore = calculateRiskScore({
     precipitation: 62,
     soilMoisture: 82,
-    lat: 27.9,
-    lng: 85.3,
+    slopeDegrees: 24,
+    elevationRelief: 480,
     name: 'Kathmandu Valley, Nepal'
   });
 
@@ -19,9 +19,22 @@ test('stable zones remain low risk even with moderate moisture', () => {
   const riskScore = calculateRiskScore({
     precipitation: 8,
     soilMoisture: 22,
-    lat: 33.5,
-    lng: -112.1,
+    slopeDegrees: 1,
+    elevationRelief: 12,
     name: 'Phoenix Metropolitan Region'
+  });
+
+  assert.equal(classifyRisk(riskScore), 'Low');
+  assert.ok(riskScore < 40);
+});
+
+test('flat urban zones should not be classified as landslide-prone unless terrain and rainfall align', () => {
+  const riskScore = calculateRiskScore({
+    precipitation: 25,
+    soilMoisture: 38,
+    slopeDegrees: 1,
+    elevationRelief: 8,
+    name: 'New York, USA'
   });
 
   assert.equal(classifyRisk(riskScore), 'Low');
